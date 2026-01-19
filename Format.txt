@@ -1,0 +1,7 @@
+How to save and run the file
+1. Create a base folder named chronic diseases 
+2. Create 2 separate folders, static and templates
+3. Python files are not a part of static and template folders
+4. Under template folder, save all html files with the exact name given
+5. Under static folder, create a css file called style, given in the github
+6. Create another folder called images, and add all the images there
