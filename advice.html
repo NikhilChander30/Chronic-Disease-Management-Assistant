@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advice</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f1f8e9); /* soft background */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    h3 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #34495e;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 6px 0;
+      font-size: 15px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      transition: 0.3s;
+      display: inline-block;
+      color: white;
+    }
+
+    .btn-call {
+      background: #e74c3c; /* red */
+    }
+    .btn-call:hover { background: #c0392b; }
+
+    .btn-whatsapp {
+      background: #25d366; /* green */
+    }
+    .btn-whatsapp:hover { background: #1ebc57; }
+
+    .btn-hospital {
+      background: #3498db; /* blue */
+    }
+    .btn-hospital:hover { background: #2c80b4; }
+
+    #print-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #2980b9;
+      color: white;
+      cursor: pointer;
+    }
+    #print-btn:hover { background: #1f6391; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Advice for {{ disease.disease.replace("_"," ").title() }}</h2>
+    <p>{{ info.treatment }}</p>
+
+    <h3>Doctor Information</h3>
+    <p><b>Name:</b> {{ info.doctor }} ({{ info.degree }})</p>
+    <p><b>Hospital:</b> {{ info.hospital }}</p>
+
+    <h3>Contact Doctor:</h3>
+    <div class="button-group">
+      <a href="tel:{{ info.phone }}" class="btn btn-call">📞 Call</a>
+      <a href="https://wa.me/{{ info.phone }}" target="_blank" class="btn btn-whatsapp">💬 WhatsApp</a>
+    </div>
+
+    <h3>Nearest Hospital:</h3>
+    <div class="button-group">
+      <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-hospital">🏥 Find Hospital</a>
+    </div>
+
+    <button id="print-btn" onclick="window.print()">🖨️ Print Full Report</button>
+<a href="{{ url_for('download_report') }}" class="btn btn-hospital" style="margin-top:15px; display:inline-block;">
+  📄 Download PDF Report
+</a>
+  </div>
+</body>
+</html>
