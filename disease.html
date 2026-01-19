@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Disease Details</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script>
+function showSymptoms() {
+    const disease = document.getElementById("disease").value;
+    const symptomDiv = document.getElementById("symptomDiv");
+    let html = "";
+    if(disease=="fever") html = '<input type="number" name="temperature" placeholder="Temperature (°C)" required>';
+    else if(disease=="diabetes") html = '<input type="number" name="blood_sugar" placeholder="Last Blood Sugar (mg/dL)" required>';
+    else if(disease=="hypertension") html = '<input type="text" name="bp_reading" placeholder="Latest BP reading" required>';
+    else if(disease=="asthma") html = '<input type="number" name="attack_per_week" placeholder="Asthma attacks per week" required>';
+    else if(disease=="migraine") html = '<input type="number" name="migraine_freq" placeholder="Frequency per month" required>';
+    else if(disease=="allergy") html = '<input type="text" name="allergy_trigger" placeholder="Allergy trigger" required>';
+    else html = '<p>No additional details required.</p>';
+    symptomDiv.innerHTML = html;
+}
+
+function selectDisease(diseaseName) {
+    document.getElementById("disease").value = diseaseName;
+    showSymptoms();
+}
+</script>
+<style>
+.disease-icon {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+}
+.disease-icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+    border: 2px solid #00796b;
+}
+.disease-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+}
+.disease-label {
+    display:block;
+    font-size:12px;
+    text-align:center;
+    margin-bottom:10px;
+}
+</style>
+</head>
+<body class="page-hospital">
+<div class="container">
+<h2>Select Disease & Provide Details</h2>
+<form method="POST">
+    <select name="disease" id="disease" onchange="showSymptoms()" required>
+        <option value="">Select Disease</option>
+        {% for d, data in diseases.items() %}
+        <option value="{{ d }}">{{ d.replace("_"," ").title() }}</option>
+        {% endfor %}
+    </select>
+    <div id="symptomDiv" style="margin-top:10px;"></div>
+    <button type="submit" style="margin-top:15px;">Next</button>
+</form>
+
+<h3 style="margin-top:25px;">Or click a disease icon:</h3>
+<div class="disease-grid">
+    {% for d, data in diseases.items() %}
+    <div style="margin:10px; text-align:center;">
+        <img src="{{ url_for('static', filename='images/' + data.icon) }}" alt="{{ d }}" title="{{ d.replace('_',' ').title() }}" class="disease-icon" onclick="selectDisease('{{ d }}')">
+        <span class="disease-label">{{ d.replace('_',' ').title() }}</span>
+    </div>
+    {% endfor %}
+</div>
+</div>
+  <div id="ai-chatbot">
+  <div id="ai-header">🤖 AI Health Assistant</div>
+  <div id="ai-messages"></div>
+  <input id="ai-input" placeholder="Ask me about your health..." />
+  </div>
+
+<script>
+const box = document.getElementById("ai-messages");
+const input = document.getElementById("ai-input");
+
+function addMsg(text, cls){
+  box.innerHTML += `<div class="${cls}">${text}</div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+addMsg("Hello! I am your AI Health Assistant. Describe your symptoms.", "bot");
+
+input.addEventListener("keypress", e=>{
+  if(e.key==="Enter"){
+    let msg = input.value;
+    addMsg(msg,"user");
+    input.value="";
+
+    fetch("/ai_chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ text: msg })
+    })
+    .then(r=>r.json())
+    .then(d=>addMsg(d.reply,"bot"));
+  }
+});
+</script>
+</body>
+</html>

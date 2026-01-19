@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Physical Details</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="page-hospital">
+<div class="container">
+  <h2>Enter Physical Details</h2>
+  <form method="POST">
+    <input type="number" name="height" placeholder="Height (cm)" required>
+    <input type="number" name="weight" placeholder="Weight (kg)" required>
+    <input type="text" name="bp" placeholder="Blood Pressure (e.g., 120/80)" required>
+    <input type="number" name="heart_rate" placeholder="Heart Rate (bpm)" required>
+    <input type="text" name="allergies" placeholder="Allergies (if any)">
+    <input type="text" name="habits" placeholder="Habits (smoking, alcohol, etc.)">
+    <button type="submit">Next</button>
+  </form>
+</div>
+</body>
+</html>
